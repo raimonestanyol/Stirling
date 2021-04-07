@@ -9,19 +9,19 @@ from django.db import models
 
 
 class TablesRegistry(models.Model):
-    amb_t = models.DecimalField(db_column='AMB_T', max_digits=3, decimal_places=1)  # Field name made lowercase.
-    boiler_t = models.DecimalField(db_column='BOILER_T', max_digits=4, decimal_places=1)  # Field name made lowercase.
-    cool_flow = models.DecimalField(db_column='COOL_FLOW', max_digits=3, decimal_places=1)  # Field name made lowercase.
-    cool_t_in = models.DecimalField(db_column='COOL_T_IN', max_digits=4, decimal_places=1)  # Field name made lowercase.
-    cool_t_out = models.DecimalField(db_column='COOL_T_OUT', max_digits=4, decimal_places=1)  # Field name made lowercase.
-    current = models.DecimalField(db_column='CURRENT', max_digits=3, decimal_places=2)  # Field name made lowercase.
-    e_energy = models.DecimalField(db_column='E_ENERGY', max_digits=5, decimal_places=1)  # Field name made lowercase.
-    e_power = models.PositiveSmallIntegerField(db_column='E_POWER')  # Field name made lowercase.
-    heat_t_con = models.DecimalField(db_column='HEAT_T_CON', max_digits=5, decimal_places=1)  # Field name made lowercase.
-    heat_t_lim = models.DecimalField(db_column='HEAT_T_LIM', max_digits=5, decimal_places=1)  # Field name made lowercase.
-    status = models.PositiveSmallIntegerField(db_column='STATUS')  # Field name made lowercase.
-    voltage = models.DecimalField(db_column='VOLTAGE', max_digits=4, decimal_places=1)  # Field name made lowercase.
-    datetime = models.DateTimeField(db_column='DATETIME')  # Field name made lowercase.
+    AMB_T = models.DecimalField(db_column='AMB_T', max_digits=3, decimal_places=1)  # Field name made lowercase.
+    BOILER_T = models.DecimalField(db_column='BOILER_T', max_digits=4, decimal_places=1)  # Field name made lowercase.
+    COOL_FLOW = models.DecimalField(db_column='COOL_FLOW', max_digits=3, decimal_places=1)  # Field name made lowercase.
+    COOL_T_IN = models.DecimalField(db_column='COOL_T_IN', max_digits=4, decimal_places=1)  # Field name made lowercase.
+    COOL_T_OUT = models.DecimalField(db_column='COOL_T_OUT', max_digits=4, decimal_places=1)  # Field name made lowercase.
+    CURRENT = models.DecimalField(db_column='CURRENT', max_digits=3, decimal_places=2)  # Field name made lowercase.
+    E_ENERGY = models.DecimalField(db_column='E_ENERGY', max_digits=5, decimal_places=1)  # Field name made lowercase.
+    E_POWER = models.PositiveSmallIntegerField(db_column='E_POWER')  # Field name made lowercase.
+    HEAT_T_CON = models.DecimalField(db_column='HEAT_T_CON', max_digits=5, decimal_places=1)  # Field name made lowercase.
+    HEAT_T_LIM = models.DecimalField(db_column='HEAT_T_LIM', max_digits=5, decimal_places=1)  # Field name made lowercase.
+    STATUS = models.PositiveSmallIntegerField(db_column='STATUS')  # Field name made lowercase.
+    VOLTAGE = models.DecimalField(db_column='VOLTAGE', max_digits=4, decimal_places=1)  # Field name made lowercase.
+    DATETIME = models.DateTimeField(db_column='DATETIME')  # Field name made lowercase.
 
     def save(self, *args, **kwargs):
         return

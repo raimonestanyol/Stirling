@@ -2,24 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registry</title>
+    <title>Registries</title>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<h1>Hello W</h1>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+<h1>Hello World</h1>
+<span><select class="browser-default custom-select" id="myselect">
+    <option value="1">Mr</option>
+    <option value="2">Mrs</option>
+    <option value="3">Ms</option>
+    <option value="4">Dr</option>
+    <option value="5">Prof</option>
+</select></span>
+
+<span><label for="fromDate">From:</label><input class="mx-3" type="text" id="fromDate"></span>
+<span><label for="toDate">To:</label><input class="mx-3" type="text" id="toDate"></span>
+
 
 <script>
     {% block jquery %}
-    var endpoint = {{endpoint}}
+    var endpoint = {{endpoint}} +'today/'
     console.log(endpoint)
     $.ajax({
-    method: "Get",
-    url: endpoint,
-    success: function(data){
-    console.log(data)},
-    error: function(error_data){
-    console.log(error_data)}
+        method: "Get",
+        url: endpoint,
+        success: function(data){
+        console.log(data)},
+        error: function(error_data){
+        console.log(error_data)}
     })
+    $( function() {
+      var from = $( "#fromDate" )
+          .datepicker({
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+          })
+          .on( "change", function() {
+            to.datepicker( "option", "minDate", getDate( this ) );
+          }),
+      to = $( "#toDate" ).datepicker({
+          dateFormat: "yy-mm-dd",
+          changeMonth: true,
+          changeYear: true
+        })
+        .on( "change", function() {
+          from.datepicker( "option", "maxDate", getDate( this ) );
+        });
+
+      function getDate( element ) {
+        var date;
+        var dateFormat = "yy-mm-dd";
+        try {
+          date = $.datepicker.parseDate( dateFormat, element.value );
+        } catch( error ) {
+          date = null;
+        }
+
+        return date;
+      }
+      $("#toDate, #fromDate").change(function() {
+        console.log(getDate( this ))
+      });
+      $( "#myselect" ).on('change', function (e) {
+        var optionSelected = $("option:selected", this);
+        var valueSelected = this.value;
+        console.log(valueSelected)
+      });
+    });
     {% endblock jquery%}
 </script>
 

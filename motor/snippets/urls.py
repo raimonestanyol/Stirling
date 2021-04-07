@@ -6,4 +6,6 @@ urlpatterns = [
     path('registriesAPI/<int:pk>/', views.registry_detail),
     path('registries/', views.list_registries),
 
+    path('registriesAPI/<int:date_from>/<int:date_to>/', views.registry_table),
+    path('registriesAPI/today/', views.registry_today)
 ]
