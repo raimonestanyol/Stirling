@@ -64,17 +64,50 @@
         } catch( error ) {
           date = null;
         }
-
         return date;
       }
+
+      function parseDate( element ) {
+        var selectedDate = getDate( this )
+        // returns the month (from 0 to 11)
+        var month = selectedDate.getMonth() + 1
+        month = month.toString()
+        // returns the day of the month (from 1 to 31)
+        var day = selectedDate.getDate().toString()
+        // returns the year (four digits)
+        var year = selectedDate.getFullYear().toString()
+        return date;
+      }
+
+      $("#toDate").change(function() {
+
+        console.log(year+month+day)
+      });
+      $("#fromDate").change(function() {
+        var selectedDate = getDate( this )
+        // returns the month (from 0 to 11)
+        var month = selectedDate.getMonth() + 1
+        month = month.toString()
+        // returns the day of the month (from 1 to 31)
+        var day = selectedDate.getDate().toString()
+        // returns the year (four digits)
+        var year = selectedDate.getFullYear().toString()
+        console.log(year+month+day)
+      });
       $("#toDate, #fromDate").change(function() {
         console.log(getDate( this ))
       });
-      $( "#myselect" ).on('change', function (e) {
-        var optionSelected = $("option:selected", this);
-        var valueSelected = this.value;
-        console.log(valueSelected)
-      });
+
+      endpoint = {{endpoint}} +'20210301/20210412/'
+
+      $.ajax({
+        method: "Get",
+        url: endpoint,
+        success: function(data){
+        console.log(data)},
+        error: function(error_data){
+        console.log(error_data)}
+    })
     });
     {% endblock jquery%}
 </script>
