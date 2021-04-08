@@ -29,14 +29,14 @@
     {% block jquery %}
     var endpoint = {{endpoint}} +'today/'
     console.log(endpoint)
-    $.ajax({
+    /*$.ajax({
         method: "Get",
         url: endpoint,
         success: function(data){
         console.log(data)},
         error: function(error_data){
         console.log(error_data)}
-    })
+    })*/
     $( function() {
       var from = $( "#fromDate" )
           .datepicker({
@@ -67,39 +67,45 @@
         return date;
       }
 
-      function parseDate( element ) {
-        var selectedDate = getDate( this )
+      function strDate( element ) {
+        var selectedDate = getDate( element )
         // returns the month (from 0 to 11)
         var month = selectedDate.getMonth() + 1
-        month = month.toString()
+        month = month.toString().padStart(2, '0')
         // returns the day of the month (from 1 to 31)
-        var day = selectedDate.getDate().toString()
+        var day = selectedDate.getDate().toString().padStart(2, '0')
         // returns the year (four digits)
         var year = selectedDate.getFullYear().toString()
-        return date;
-      }
-
-      $("#toDate").change(function() {
-
-        console.log(year+month+day)
-      });
+        return year+month+day;
+      };
+      var fromDate = '20210312';
+      var toDate = '29210312';
+      /*$("#toDate", "#fromDate").change(function() {
+        var fromElement=$("#fromDate")[0]
+        var toElement=$("#toDate")[0]
+        fromDate = strDate(fromElement)
+        toDate = strDate(toElement)
+        console.log(fromDate)
+        console.log(toDate)
+        console.log('henlo?')
+        retrieveData(fromDate,toDate);
+      });*/
       $("#fromDate").change(function() {
-        var selectedDate = getDate( this )
-        // returns the month (from 0 to 11)
-        var month = selectedDate.getMonth() + 1
-        month = month.toString()
-        // returns the day of the month (from 1 to 31)
-        var day = selectedDate.getDate().toString()
-        // returns the year (four digits)
-        var year = selectedDate.getFullYear().toString()
-        console.log(year+month+day)
+        fromDate = strDate(this)
+        console.log(fromDate)
+        retrieveData(fromDate,toDate)
       });
-      $("#toDate, #fromDate").change(function() {
+      $("#toDate").change(function() {
+        toDate = strDate(this)
+        console.log(toDate)
+        retrieveData(fromDate,toDate)
+      });
+      /*$("#toDate, #fromDate").change(function() {
         console.log(getDate( this ))
-      });
+      });*/
 
-      endpoint = {{endpoint}} +'20210301/20210412/'
-
+      function retrieveData(fromDate, toDate){
+      endpoint = {{endpoint}} + fromDate + '/' + toDate
       $.ajax({
         method: "Get",
         url: endpoint,
@@ -107,7 +113,8 @@
         console.log(data)},
         error: function(error_data){
         console.log(error_data)}
-    })
+      })
+      };
     });
     {% endblock jquery%}
 </script>
