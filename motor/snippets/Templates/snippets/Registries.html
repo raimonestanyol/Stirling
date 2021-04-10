@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Registries</title>
 </head>
 <body>
@@ -11,24 +12,51 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+{% load static %}
+<script type="text/javascript" src="{% static 'snippets/tabulator.min.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'snippets/jquery_wrapper.min.js' %}"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<link href="https://unpkg.com/tabulator-tables@4.1.4/dist/css/tabulator.min.css" rel="stylesheet">
 
 <h1>Hello World</h1>
-<span><select class="browser-default custom-select" id="myselect">
-    <option value="1">Mr</option>
-    <option value="2">Mrs</option>
-    <option value="3">Ms</option>
-    <option value="4">Dr</option>
-    <option value="5">Prof</option>
-</select></span>
+<div class="container">
+    <div class="row">
+        <div>
+            <select class="browser-default custom-select custom-select-lg col-12 col-sm-4" id="myselect">
+                <option value="1">Voltage</option>
+                <option value="2">Ambient_temperature</option>
+                <option value="3">Cool temperature in</option>
+                <option value="4">Dr</option>
+                <option value="5">Prof</option>
+            </select>
+        </div>
+    <div class="col-12 col-sm-4"><label style="display: inline;" for="fromDate">From:</label><input style="display: inline;" class="mx-3" type="text" id="fromDate"></div>
+    <div><label style="display: inline;" for="toDate">To:</label><input style="display: inline;" class="mx-3" type="text" id="toDate"></div>
 
-<span><label for="fromDate">From:</label><input class="mx-3" type="text" id="fromDate"></span>
-<span><label for="toDate">To:</label><input class="mx-3" type="text" id="toDate"></span>
+    </div>
+</div>
 
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+        <canvas id="myChart" width="400" height="400">
+            <script>
+                $(document).ready(function(){
+
+                })
+            </script>
+        </canvas>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
 
 <script>
     {% block jquery %}
     var endpoint = {{endpoint}} +'today/'
-    console.log(endpoint)
+    //console.log(endpoint)
     /*$.ajax({
         method: "Get",
         url: endpoint,
@@ -67,8 +95,13 @@
         return date;
       }
 
-      function strDate( element ) {
+      function strDate( element, index ) {
         var selectedDate = getDate( element )
+        selectedDate.setDate(selectedDate.getDate() + index);
+        return reprDate( selectedDate )
+      };
+      function reprDate( selectedDate ){
+        var selectedDate= new Date(selectedDate)
         // returns the month (from 0 to 11)
         var month = selectedDate.getMonth() + 1
         month = month.toString().padStart(2, '0')
@@ -78,46 +111,75 @@
         var year = selectedDate.getFullYear().toString()
         return year+month+day;
       };
-      var fromDate = '20210312';
-      var toDate = '29210312';
-      /*$("#toDate", "#fromDate").change(function() {
-        var fromElement=$("#fromDate")[0]
-        var toElement=$("#toDate")[0]
-        fromDate = strDate(fromElement)
-        toDate = strDate(toElement)
-        console.log(fromDate)
-        console.log(toDate)
-        console.log('henlo?')
-        retrieveData(fromDate,toDate);
-      });*/
+      var toDate = new Date();
+      var fromDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
+      fromDate = reprDate(fromDate)
+      toDate = reprDate(toDate);
+      console.log(fromDate)
+      console.log(toDate)
+
       $("#fromDate").change(function() {
-        fromDate = strDate(this)
-        console.log(fromDate)
+        fromDate = strDate(this, 0)
+        //console.log(fromDate)
         retrieveData(fromDate,toDate)
       });
       $("#toDate").change(function() {
-        toDate = strDate(this)
-        console.log(toDate)
+        toDate = strDate(this, 1)
+        //console.log(toDate)
         retrieveData(fromDate,toDate)
       });
-      /*$("#toDate, #fromDate").change(function() {
-        console.log(getDate( this ))
-      });*/
+      function setDataTable(){
+    var table = new Tabulator("#example-table", {
 
-      function retrieveData(fromDate, toDate){
-      endpoint = {{endpoint}} + fromDate + '/' + toDate
+    data:tableData,           //load row data from array
+    autoColumns:true,         //create columns from data field names
+    layout:"fitColumns",      //fit columns to width of table
+    responsiveLayout:"hide",  //hide columns that dont fit on the table
+    tooltips:true,            //show tool tips on cells
+    addRowPos:"top",          //when adding a new row, add it to the top of the table
+    history:true,             //allow undo and redo actions on the table
+    pagination:"local",       //paginate the data
+    paginationSize:20,         //allow 7 rows per page of data
+    movableColumns:true,      //allow column order to be changed
+    resizableRows:true,       //allow row order to be changed
+    initialSort:[             //set the initial sort order of the data
+        {column:"DATETIME", dir:"asc"},
+    ],
+    columns:[                 //define the table columns
+        {title:"AMB_T", field:"AMB_T", headerFilter:"input"},
+        {title:"BOILER_T", field:"BOILER_T", headerFilter:"input"},
+        {title:"COOL_FLOW", field:"COOL_FLOW", headerFilter:"input"},
+        {title:"COOL_T_IN", field:"COOL_T_IN", headerFilter:"input"},
+        {title:"COOL_T_OUT", field:"COOL_T_OUT", headerFilter:"input"},
+        {title:"DATETIME", field:"DATETIME", headerFilter:"input"},
+        {title:"E_ENERGY", field:"E_ENERGY", headerFilter:"input"},
+    ],
+    })};
+    //table.setData(endpoint);
+    function retrieveData(fromDate, toDate){
+      endpoint = {{endpoint}} + fromDate + '/' + toDate +'/'
+      //table.setData(endpoint);
       $.ajax({
         method: "Get",
         url: endpoint,
         success: function(data){
-        console.log(data)},
+        tableData=data
+        setDataTable()},
         error: function(error_data){
         console.log(error_data)}
       })
-      };
-    });
+    };
+    retrieveData(fromDate, toDate)
+    document.getElementById("download-csv").addEventListener("click", function(){
+    table.download("csv", "data.csv");});
+    })
     {% endblock jquery%}
 </script>
+<div>
+    <button id="download-csv">Download CSV</button>
+</div>
+<div id="example-table"></div>
 
 </body>
 </html>
