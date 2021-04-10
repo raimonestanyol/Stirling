@@ -1,0 +1,207 @@
+<script>
+var endpoint = {{endpoint}} +'today/'
+    /*$.ajax({
+        method: "Get",
+        url: endpoint,
+        success: function(data){
+        console.log(data)},
+        error: function(error_data){
+        console.log(error_data)}
+    })*/
+    $( function() {
+      var from = $( "#fromDate" )
+          .datepicker({
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true
+          })
+          .on( "change", function() {
+            to.datepicker( "option", "minDate", getDate( this ) );
+          }),
+      to = $( "#toDate" ).datepicker({
+          dateFormat: "yy-mm-dd",
+          changeMonth: true,
+          changeYear: true
+        })
+        .on( "change", function() {
+          from.datepicker( "option", "maxDate", getDate( this ) );
+        });
+
+      function getDate( element ) {
+        var date;
+        var dateFormat = "yy-mm-dd";
+        try {
+          date = $.datepicker.parseDate( dateFormat, element.value );
+        } catch( error ) {
+          date = null;
+        }
+        return date;
+      }
+
+      function strDate( element, index ) {
+        var selectedDate = getDate( element )
+        selectedDate.setDate(selectedDate.getDate() + index);
+        return reprDate( selectedDate )
+      };
+      function reprDate( selectedDate ){
+        var selectedDate= new Date(selectedDate)
+        var month = selectedDate.getMonth() + 1
+        month = month.toString().padStart(2, '0')
+        var day = selectedDate.getDate().toString().padStart(2, '0')
+        var year = selectedDate.getFullYear().toString()
+        return year+month+day;
+      };
+      var toDate = new Date();
+      var fromDate = new Date();
+      toDate.setDate(toDate.getDate() + 1);
+      fromDate = reprDate(fromDate)
+      toDate = reprDate(toDate);
+      //console.log(fromDate)
+      //console.log(toDate)
+
+      $("#fromDate").change(function() {
+        fromDate = strDate(this, 0)
+        //console.log(fromDate)
+        retrieveData(fromDate,toDate)
+      });
+      $("#toDate").change(function() {
+        toDate = strDate(this, 1)
+        //console.log(toDate)
+        retrieveData(fromDate,toDate)
+      });
+      function setDataTable(){
+    var table = new Tabulator("#example-table", {
+
+    data:tableData,           //load row data from array
+    //autoColumns:true,         //create columns from data field names
+    layout:"fitColumns",      //fit columns to width of table
+    responsiveLayout:"hide",  //hide columns that dont fit on the table
+    tooltips:true,            //show tool tips on cells
+    addRowPos:"top",          //when adding a new row, add it to the top of the table
+    history:true,             //allow undo and redo actions on the table
+    pagination:"local",       //paginate the data
+    paginationSize:20,         //allow 7 rows per page of data
+    movableColumns:true,      //allow column order to be changed
+    resizableRows:true,       //allow row order to be changed
+    initialSort:[             //set the initial sort order of the data
+        {column:"DATETIME", dir:"asc"},
+    ],
+    columns:[                 //define the table columns
+        {title:"DATETIME", field:"DATETIME", headerFilter:"input"},
+        {title:"AMB_T", field:"AMB_T", headerFilter:"input"},
+        {title:"BOILER_T", field:"BOILER_T", headerFilter:"input"},
+        {title:"HEAT_T_CON", field:"HEAT_T_CON", headerFilter:"input"},
+        {title:"HEAT_T_LIM", field:"HEAT_T_LIM", headerFilter:"input"},
+        {title:"COOL_FLOW", field:"COOL_FLOW", headerFilter:"input"},
+        {title:"COOL_T_IN", field:"COOL_T_IN", headerFilter:"input"},
+        {title:"COOL_T_OUT", field:"COOL_T_OUT", headerFilter:"input"},
+        {title:"CURRENT", field:"CURRENT", headerFilter:"input"},
+        {title:"VOLTAGE", field:"VOLTAGE", headerFilter:"input"},
+        {title:"E_POWER", field:"E_POWER", headerFilter:"input"},
+        {title:"E_ENERGY", field:"E_ENERGY", headerFilter:"input"},
+        {title:"STATUS", field:"STATUS", headerFilter:"input"},
+    ],
+    })};
+    //table.setData(endpoint);
+    function retrieveData(fromDate, toDate){
+      endpoint = {{endpoint}} + fromDate + '/' + toDate +'/'
+      //table.setData(endpoint);
+      $.ajax({
+        method: "Get",
+        url: endpoint,
+        success: function(data){
+        tableData=data
+        console.log(data)
+        setDataTable()
+        drawChart()},
+        error: function(error_data){
+        console.log(error_data)}
+      })
+    };
+    retrieveData(fromDate, toDate)
+    document.getElementById("download-csv").addEventListener("click", function(){
+      table.download("csv", "data.csv");});
+    })
+  
+  
+    google.charts.load('current', {'packages':['line', 'corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var chartDiv = document.getElementById('chart_div');
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Datetime');
+      data.addColumn('number', "AMB_T");
+      // data.addColumn('number', "BOILER_T");
+      // data.addColumn('number', "HEAT_T_CON");
+      // data.addColumn('number', "HEAT_T_LIM");
+      // data.addColumn('number', "COOL_FLOW");
+      // data.addColumn('number', "COOL_T_IN");
+      // data.addColumn('number', "COOL_T_OUT");
+      // data.addColumn('number', "CURRENT");
+      // data.addColumn('number', "VOLTAGE");
+      // data.addColumn('number', "E_POWER");
+      // data.addColumn('number', "E_ENERGY");
+      // data.addColumn('number', "STATUS");
+      
+
+      
+      function getFullArray(item) {
+      // var fullArray = [item.AMB_T,item.BOILER_T,item.HEAT_T_CON,item.HEAT_T_LIM,item.COOL_FLOW, item.COOL_T_IN, item.COOL_T_OUT, item.CURRENT, item.VOLTAGE, item.E_POWER, item.E_ENERGY, item.STATUS, item.DATETIME];
+      // for(i=0; i<12; i++){fullArray[i]=parseFloat(fullArray[i])}
+      // fullArray[12]=new Date(fullArray[12])
+      var fullArray = [item.DATETIME, item.AMB_T];
+      fullArray[1]=parseFloat(fullArray[1])
+      fullArray[0]=new Date(fullArray[0])
+      return fullArray;
+      }
+      function mapData() {
+      return tableData.map(getFullArray);
+      }
+      data.addRows(mapData());
+      /*[
+        [new Date(2014, 0),  -.5,  5.7],
+        [new Date(2014, 1),   .4,  8.7],
+        [new Date(2014, 2),   .5,   12],
+        [new Date(2014, 3),  2.9, 15.3],
+        [new Date(2014, 4),  6.3, 18.6],
+        [new Date(2014, 5),    9, 20.9],
+        [new Date(2014, 6), 10.6, 19.8],
+        [new Date(2014, 7), 10.3, 16.6],
+        [new Date(2014, 8),  7.4, 13.3],
+        [new Date(2014, 9),  4.4,  9.9],
+        [new Date(2014, 10), 1.1,  6.6],
+        [new Date(2014, 11), -.2,  4.5]
+      ]*/
+
+      var materialOptions = {
+        chart: {
+          title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
+        },
+        width: 900,
+        height: 500,
+        series: {
+          // Gives each series an axis name that matches the Y-axis below.
+          0: {axis: 'Temps'},
+          1: {axis: 'Daylight'}
+        },
+        axes: {
+          // Adds labels to each axis; they don't have to match the axis names.
+          y: {
+            Temps: {label: 'Temps (Celsius)'},
+            Daylight: {label: 'Daylight'}
+          }
+        }
+      };
+
+      function drawMaterialChart() {
+        var materialChart = new google.charts.Line(chartDiv);
+        materialChart.draw(data, materialOptions);
+      }
+
+      drawMaterialChart();
+
+    }
+</script>
