@@ -115,11 +115,11 @@
     addVarSelector()    
 
 
-    function checkAMB_T() {
+    function checkInitial() {
       document.getElementById("AMB_T").checked = true;
       graphVars["AMB_T"]=true
     }
-    checkAMB_T()
+    checkInitial()
     
 
     var endpoint = {{endpoint}} +'today/';
@@ -159,7 +159,7 @@
       var data = new google.visualization.DataTable();
 
       data.addColumn('datetime', 'Datetime');
-      Object.keys(graphVars).forEach(varName => {
+      columns.forEach(varName => {
         if(graphVars[varName]==true){data.addColumn('number',varName)}
       });
       // data.addColumn('number', "AMB_T");
@@ -195,7 +195,7 @@
         //   fullArray.unshift(new Date(item.DATETIME))}
         varNames=Object.keys(graphVars)
         var fullArray=[new Date(item.DATETIME)]        
-        varNames.forEach(varName=>{
+        columns.forEach(varName=>{
           if(graphVars[varName]==true){fullArray.push(parseFloat(item[varName]))}
         })
         return fullArray
@@ -205,11 +205,13 @@
       }
 
       data.addRows(mapData());
-
-      
+            
       var chartDiv = document.getElementById('chart_div');
       var materialChart = new google.charts.Line(chartDiv);
       materialChart.draw(data, google.charts.Line.convertOptions(materialOptions));
+      google.visualization.events.addListener(materialChart, 'error', function (googleError) {
+        google.visualization.errors.removeError(googleError.id);
+      });
     } 
 
     function retrieveData(fromDate, toDate){
@@ -229,6 +231,16 @@
       })
     };
     retrieveData(fromDate, toDate)  
+    $(".form-check-input").change(function() {
+    if(this.checked) {
+      graphVars[$(this).attr('id')]=true
+      drawChart()
+    }
+    else{
+      graphVars[$(this).attr('id')]=false
+      drawChart()
+    }
+});
   })
 
   
