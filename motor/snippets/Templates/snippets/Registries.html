@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        #ui-datepicker-div {
+            background-color: #eee;
+            border: solid black 1px;
+        }
+    </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,15 +42,13 @@
 
     </div>
 </div>
-
+<div id="graph-selector"></div>
     {% include "snippets/js_base.html" %}
 
 <div>
     <button id="download-csv">Download CSV</button>
 </div>
+<div id="chart_div" class="m-4"></div>
 <div id="example-table"></div>
-
-
-  <div id="chart_div"></div>
 </body>
 </html>

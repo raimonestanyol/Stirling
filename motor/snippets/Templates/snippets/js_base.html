@@ -101,7 +101,26 @@ var endpoint = {{endpoint}} +'today/'
         {title:"E_ENERGY", field:"E_ENERGY", headerFilter:"input"},
         {title:"STATUS", field:"STATUS", headerFilter:"input"},
     ],
-    })};
+    })
+    document.getElementById("download-csv").addEventListener("click", function(){
+      table.download("csv", "data.csv");});
+  };
+    
+    function addVarSelector(){
+      columns=["DATETIME","AMB_T","BOILER_T","HEAT_T_CON","HEAT_T_LIM","COOL_FLOW","COOL_T_IN","COOL_T_OUT","CURRENT","VOLTAGE","E_POWER","E_ENERGY","STATUS"]
+      var varCheckboxArray = columns.map(name => {
+      return `
+        <div class='${name}'>
+          <input class="form-check-input" type="checkbox" value="${name}" id="${name}">
+          <label class="form-check-label" for="${name}">${name}</label>
+        </div>
+      `
+      })
+      $('#graph-selector').html(varCheckboxArray.join(''))
+    }
+    addVarSelector()
+      
+
     //table.setData(endpoint);
     function retrieveData(fromDate, toDate){
       endpoint = {{endpoint}} + fromDate + '/' + toDate +'/'
@@ -111,7 +130,7 @@ var endpoint = {{endpoint}} +'today/'
         url: endpoint,
         success: function(data){
         tableData=data
-        console.log(data)
+        //console.log(data)
         setDataTable()
         drawChart()},
         error: function(error_data){
@@ -119,8 +138,7 @@ var endpoint = {{endpoint}} +'today/'
       })
     };
     retrieveData(fromDate, toDate)
-    document.getElementById("download-csv").addEventListener("click", function(){
-      table.download("csv", "data.csv");});
+    
     })
   
   
@@ -152,9 +170,9 @@ var endpoint = {{endpoint}} +'today/'
       // var fullArray = [item.AMB_T,item.BOILER_T,item.HEAT_T_CON,item.HEAT_T_LIM,item.COOL_FLOW, item.COOL_T_IN, item.COOL_T_OUT, item.CURRENT, item.VOLTAGE, item.E_POWER, item.E_ENERGY, item.STATUS, item.DATETIME];
       // for(i=0; i<12; i++){fullArray[i]=parseFloat(fullArray[i])}
       // fullArray[12]=new Date(fullArray[12])
-      var fullArray = [item.DATETIME, item.AMB_T];
-      fullArray[1]=parseFloat(fullArray[1])
-      fullArray[0]=new Date(fullArray[0])
+      var fullArray = [];
+      fullArray[0]=new Date(item.DATETIME)
+      fullArray[1]=parseFloat(item.AMB_T)
       return fullArray;
       }
       function mapData() {
@@ -180,7 +198,7 @@ var endpoint = {{endpoint}} +'today/'
         chart: {
           title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
         },
-        width: 900,
+        //width: 900,
         height: 500,
         series: {
           // Gives each series an axis name that matches the Y-axis below.
