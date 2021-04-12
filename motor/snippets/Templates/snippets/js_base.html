@@ -176,6 +176,8 @@
               newName=`${varName} [V]`
           } else if ( varName.includes("ENERGY")){
               newName=`${varName} [kWh]`
+          } else {
+              newName=varName
           }
           data.addColumn('number',newName)                   
         }
@@ -200,9 +202,11 @@
         var fullArray=[new Date(item.DATETIME)]        
         columns.forEach(varName=>{
           if(graphVars[varName]==true){
-            if(varName.includes("T_P")){item[varName]=item["AMB_T"]*item["COOL_FLOW"]*4182}
-            
-            fullArray.push(parseFloat(item[varName]))
+            if(varName.includes("T_P")){
+              fullArray.push(parseFloat(
+                Math.max(0,(item["COOL_T_OUT"]-item["COOL_T_IN"])*item["COOL_FLOW"]*4182/60)
+              ))} else {
+            fullArray.push(parseFloat(item[varName]))}            
           }
         })
         return fullArray
