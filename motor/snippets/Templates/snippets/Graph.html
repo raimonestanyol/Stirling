@@ -8,9 +8,18 @@
 
 {% block body %}
 
-<div style="display: grid; grid-template-columns: 120px auto;">
-    <div style="grid-column: 1;" class=" mx-3" id="graph-selector"></div>
-    <div style="grid-column: 2;" class="mx-3" id="chart_div"></div>
-</div>
+    <div class="row w-100">
+        <span style="display:inline-block;" class="col-12 col-sm-2 pl-sm-5" id="graph-selector"></span>
+        <span style="display:inline-block;" class="col-12 col-sm-10 pl-sm-5" id="chart_div"></span>
+    </div>
+
+<!--<div style="display: grid; grid-template-columns: 120px auto;">-->
+<!--    <div style="grid-column: 1;" class=" mx-3" id="graph-selector"></div>-->
+<!--    <div style="grid-column: 2;" class="mx-3" id="chart_div"></div>-->
+<!--</div>-->
+<!--<div >-->
+<!--    <span style="display:inline-block; min-width:120px;" class=" mx-3" id="graph-selector"></span>-->
+<!--    <span style="display:inline-block; min-width:400px; width:85%;" class="mx-3" id="chart_div"></span>-->
+<!--</div>-->
 {% include "snippets/js-graph.html" %}
 {% endblock body %}

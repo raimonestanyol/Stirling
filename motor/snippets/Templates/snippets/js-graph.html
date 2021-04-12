@@ -68,7 +68,7 @@
     function addVarSelector(){
       var varCheckboxArray = columns.map(name => {
         return `
-          <div class='${name} ml-4'>
+          <div class='${name}'>
             <input class="form-check-input" type="checkbox" value="${name}" id="${name}">
             <label class="form-check-label" for="${name}">${name}</label>
           </div>
@@ -139,7 +139,7 @@
           if(graphVars[varName]==true){
             if(varName.includes("T_P")){
               fullArray.push(parseFloat(
-                Math.max(0,(item["COOL_T_OUT"]-item["COOL_T_IN"])*item["COOL_FLOW"]*4182/60)
+                Math.max(0,(item["COOL_T_OUT"]-item["COOL_T_IN"])*item["COOL_FLOW"]*4184/60)
               ))} else {
             fullArray.push(parseFloat(item[varName]))}            
           }
