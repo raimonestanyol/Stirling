@@ -28,30 +28,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <link href="https://unpkg.com/tabulator-tables@4.1.4/dist/css/tabulator.min.css" rel="stylesheet">
 
-<h1>Hello World</h1>
+<h1 class="mb-4">Hello World</h1>
 <div class="container">
     <div class="row">
-        <div>
-            <select class="browser-default custom-select custom-select-lg col-12 col-sm-4" id="myselect">
-                <option value="1">Voltage</option>
-                <option value="2">Ambient_temperature</option>
-                <option value="3">Cool temperature in</option>
-                <option value="4">Dr</option>
-                <option value="5">Prof</option>
-            </select>
-        </div>
-    <div class="col-12 col-sm-4"><label style="display: inline;" for="fromDate">From:</label><input style="display: inline;" class="mx-3" type="text" id="fromDate"></div>
-    <div><label style="display: inline;" for="toDate">To:</label><input style="display: inline;" class="mx-3" type="text" id="toDate"></div>
-
+        <div class="col-12 col-sm-4 mx-3"><label style="display: inline-block; width: 40px;" for="fromDate">From:</label><input style="display: inline-block;" class="mx-3" type="text" id="fromDate"></div>
+        <div class="col-12 col-sm-4 mx-3"><label style="display: inline-block; width: 40px;" for="toDate">To:</label><input style="display: inline-block;" class="mx-3" type="text" id="toDate"></div>
     </div>
 </div>
-<div id="graph-selector"></div>
+<div id="graph-selector" class="ml-4"></div>
     {% include "snippets/js_base.html" %}
 
 <div>
     <button id="download-csv">Download CSV</button>
 </div>
 <div id="chart_div" class="m-4"></div>
+<div id="toolbar_div" class="m-4"></div>
 <div id="example-table"></div>
 </body>
 </html>

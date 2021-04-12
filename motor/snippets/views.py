@@ -8,7 +8,11 @@ from datetime import datetime as dt, timedelta as td
 
 
 def list_registries(request):
-    return render(request, 'snippets/Registries.html', {'endpoint': '/registriesAPI/'})
+    return render(request, 'snippets/Table.html', {'endpoint': '/registriesAPI/'})
+
+
+def graph_registries(request):
+    return render(request, 'snippets/Graph.html', {'endpoint': '/registriesAPI/'})
 
 
 @api_view(('GET',))### NOT NEEDED

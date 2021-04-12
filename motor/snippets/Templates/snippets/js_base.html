@@ -19,6 +19,8 @@
       .on( "change", function() {
         from.datepicker( "option", "maxDate", getDate( this ) );
       });
+    from.attr("autocomplete","off")
+    to.attr("autocomplete","off")
 
     function getDate( element ) {
       var date;
@@ -137,22 +139,22 @@
     // google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
       var materialOptions = {
-        chart: {
-          title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
-        },
+        // chart: {
+        //   title: 'Average Temperatures and Daylight in Iceland Throughout the Year'
+        // },
         //width: 900,
         height: 500,
-        series: {
+        series: {},
           // Gives each series an axis name that matches the Y-axis below.
-          0: {axis: 'Temps'},
-          1: {axis: 'Daylight'}
-        },
+        //   0: {axis: 'Temps'},
+        //   1: {axis: 'Daylight'}
+        // },
         axes: {
           // Adds labels to each axis; they don't have to match the axis names.
-          y: {
-            Temps: {label: 'Temps (Celsius)'},
-            Daylight: {label: 'Daylight'}
-          }
+          // y: {
+          //   Temps: {label: 'Temps (Celsius)'},
+          //   Daylight: {label: 'Daylight'}
+          // }
         }
       };
 
@@ -160,7 +162,23 @@
 
       data.addColumn('datetime', 'Datetime');
       columns.forEach(varName => {
-        if(graphVars[varName]==true){data.addColumn('number',varName)}
+        if(graphVars[varName]==true){
+          var newName;
+          if( varName.includes("_T")){
+              newName=`${varName} [ºC]`
+          } else if( varName.includes("POWER")){
+              newName=`${varName} [W]`
+          } else if ( varName.includes("FLOW")){
+              newName=`${varName} [l/min]`
+          } else if( varName.includes("CURRENT")){
+              newName=`${varName} [A]`
+          } else if ( varName.includes("VOLTAGE")){
+              newName=`${varName} [V]`
+          } else if ( varName.includes("ENERGY")){
+              newName=`${varName} [kWh]`
+          }
+          data.addColumn('number',newName)                   
+        }
       });
       // data.addColumn('number', "AMB_T");
       // data.addColumn('number', "BOILER_T");
@@ -178,21 +196,6 @@
 
       
       function getFullArray(item) {
-      // var fullArray = [item.AMB_T,item.BOILER_T,item.HEAT_T_CON,item.HEAT_T_LIM,item.COOL_FLOW, item.COOL_T_IN, item.COOL_T_OUT, item.CURRENT, item.VOLTAGE, item.E_POWER, item.E_ENERGY, item.STATUS, item.DATETIME];
-      // for(i=0; i<12; i++){fullArray[i]=parseFloat(fullArray[i])}
-      // fullArray[12]=new Date(fullArray[12])
-
-      // var fullArray = [];
-      // fullArray[0]=new Date(item.DATETIME)
-      // fullArray[1]=parseFloat(item.AMB_T)
-
-        // if(item.AMB_T!=undefined){
-        //   var varNames = Object.keys(graphVars)
-        //   console.log(varNames)
-        //   var fullArray = varNames.map(varName => {
-        //     if(graphVars[varName]==true){parseFloat(item.varName); console.log(item)}
-        //   })
-        //   fullArray.unshift(new Date(item.DATETIME))}
         varNames=Object.keys(graphVars)
         var fullArray=[new Date(item.DATETIME)]        
         columns.forEach(varName=>{
@@ -200,15 +203,25 @@
         })
         return fullArray
       }
+
       function mapData() {
       return tableData.map(getFullArray);
       }
 
       data.addRows(mapData());
-            
+      // function drawToolbar() {
+      //   var components = [
+      //       {type: 'csv', datasource: endpoint}
+      //   ];
+
+      //   var container = document.getElementById('toolbar_div');
+      //   google.visualization.drawToolbar(container, components);
+      // };
+      // drawToolbar()
       var chartDiv = document.getElementById('chart_div');
       var materialChart = new google.charts.Line(chartDiv);
       materialChart.draw(data, google.charts.Line.convertOptions(materialOptions));
+      
       google.visualization.events.addListener(materialChart, 'error', function (googleError) {
         google.visualization.errors.removeError(googleError.id);
       });
@@ -232,15 +245,15 @@
     };
     retrieveData(fromDate, toDate)  
     $(".form-check-input").change(function() {
-    if(this.checked) {
-      graphVars[$(this).attr('id')]=true
-      drawChart()
-    }
-    else{
-      graphVars[$(this).attr('id')]=false
-      drawChart()
-    }
-});
+      if(this.checked) {
+        graphVars[$(this).attr('id')]=true
+        drawChart()
+      }
+      else{
+        graphVars[$(this).attr('id')]=false
+        drawChart()
+      }
+    });
   })
 
   
