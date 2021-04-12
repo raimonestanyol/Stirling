@@ -3,32 +3,16 @@
 {% block header %}
     {% load static %}
     <script type="text/javascript" src="{% static 'snippets/tabulator.min.js' %}"></script>
-    <!--<script type="text/javascript" src="{% static 'snippets/jquery_wrapper.min.js' %}"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <link href="https://unpkg.com/tabulator-tables@4.1.4/dist/css/tabulator.min.css" rel="stylesheet">
-    <title>Registries</title>
-    <style>
-        #google-visualization-errors-all-11{
-            display:none;
-        }
-    </style>
+    <title>Stirling Table</title>
+
 {% endblock header %}
+
 {% block body %}
-<h1 class="mb-4">Hello World</h1>
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-sm-4 mx-3"><label style="display: inline-block; width: 40px;" for="fromDate">From:</label><input style="display: inline-block;" class="mx-3" type="text" id="fromDate"></div>
-        <div class="col-12 col-sm-4 mx-3"><label style="display: inline-block; width: 40px;" for="toDate">To:</label><input style="display: inline-block;" class="mx-3" type="text" id="toDate"></div>
-    </div>
-</div>
-<div id="graph-selector" class="ml-4"></div>
 {% include "snippets/js-tables.html" %}
-
-
 <div>
     <button id="download-csv">Download CSV</button>
 </div>
-<div id="chart_div" class="m-4"></div>
-<div id="toolbar_div" class="m-4"></div>
-<div id="example-table"></div>
+<div id="table"></div>
 {% endblock body %}
