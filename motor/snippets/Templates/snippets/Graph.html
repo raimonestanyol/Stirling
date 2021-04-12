@@ -1,6 +1,7 @@
 {% extends "snippets/Base.html" %}
 
 {% block header %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     {% load static %}
     <script type="text/javascript" src="{% static 'snippets/tabulator.min.js' %}"></script>
     <!--<script type="text/javascript" src="{% static 'snippets/jquery_wrapper.min.js' %}"></script>-->
@@ -22,7 +23,7 @@
     </div>
 </div>
 <div id="graph-selector" class="ml-4"></div>
-{% include "snippets/js-tables.html" %}
+{% include "snippets/js_base.html" %}
 
 
 <div>
