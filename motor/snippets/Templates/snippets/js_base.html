@@ -99,12 +99,11 @@
     };
     
     google.charts.setOnLoadCallback(drawChart);
-    var columns=["DATETIME","AMB_T","BOILER_T","HEAT_T_CON","HEAT_T_LIM","COOL_FLOW","COOL_T_IN","COOL_T_OUT","CURRENT","VOLTAGE","E_POWER","E_ENERGY","STATUS"]
+    var columns=["DATETIME","AMB_T","BOILER_T","HEAT_T_CON","HEAT_T_LIM","COOL_FLOW","COOL_T_IN","COOL_T_OUT","CURRENT","VOLTAGE","E_POWER","E_ENERGY","T_POWER","STATUS"]
     columns.shift()
     graphVars = {}
     function addVarSelector(){
       var varCheckboxArray = columns.map(name => {
-        graphVars[name]=false
         return `
           <div class='${name} ml-4'>
             <input class="form-check-input" type="checkbox" value="${name}" id="${name}">
@@ -118,6 +117,7 @@
 
 
     function checkInitial() {
+      columns.forEach(name => graphVars[name]=false)
       document.getElementById("AMB_T").checked = true;
       graphVars["AMB_T"]=true
     }
@@ -199,7 +199,11 @@
         varNames=Object.keys(graphVars)
         var fullArray=[new Date(item.DATETIME)]        
         columns.forEach(varName=>{
-          if(graphVars[varName]==true){fullArray.push(parseFloat(item[varName]))}
+          if(graphVars[varName]==true){
+            if(varName.includes("T_P")){item[varName]=item["AMB_T"]*item["COOL_FLOW"]*4182}
+            
+            fullArray.push(parseFloat(item[varName]))
+          }
         })
         return fullArray
       }
