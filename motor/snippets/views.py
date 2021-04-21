@@ -68,6 +68,18 @@ def registry_table(request, date_from, date_to):
         return Response(serializer.data)
 
 
+@api_view(('GET',))
+def real_time(request):
+    try:
+        registry = TablesRegistry.objects.last()
+    except TablesRegistry.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = TableSerializer(registry)
+        return Response(serializer.data)
+
+
 def graphs_decoder(graphs):
     graphs = str(graphs)
     graphs_num = graphs.count("1") - 1
@@ -97,7 +109,7 @@ def registry_graph(request, graphs, date_from, date_to):
 
     except TablesRegistry.DoesNotExist:
         return HttpResponse(status=404)
-
+    return Response(registry)
     if request.method == 'GET':
         # serializer = TableSerializer(registry, many=True)
         return Response(registry)

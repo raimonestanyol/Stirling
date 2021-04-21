@@ -181,9 +181,8 @@
         url: endpoint,
         success: function(data){
         tableData=data
-        drawChart()
-        // try{drawChart()}
-        // catch{}
+        try{drawChart()}
+        catch{}
         },
         error: function(error_data){
         }

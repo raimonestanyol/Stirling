@@ -6,7 +6,13 @@
 
 {% block body %}
 {% load static %}
+
+
 <div class=" bg-dark">
-<img class="img-fluid mx-auto d-block" alt="Stirling dish generator installed on the roof of ETSEIB building in Barcelona"  src="{% static 'snippets/Stirling_Generator.JPG' %}">
+    <div id="real-time-vars" class="text-light p-3" ></div>
+    <img class="img-fluid mx-auto d-block" alt="Stirling dish generator installed on the roof of ETSEIB building in Barcelona"  src="{% static 'snippets/Stirling_Generator.JPG' %}">
 </div>
+
+{% include "snippets/nav-bar-selector-home.html" %}
+{% include "snippets/js-real_time.html" %}
 {% endblock body %}
