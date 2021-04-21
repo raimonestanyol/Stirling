@@ -1,0 +1,19 @@
+{% extends "snippets/Base.html" %}
+
+{% block header %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'snippets/tabulator.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'snippets/table.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@4.1.4/dist/css/tabulator.min.css" rel="stylesheet">
+    <title>Stirling Table</title>
+
+{% endblock header %}
+
+{% block body %}
+{% include "snippets/js-tables.html" %}
+<div>
+    <button id="download-csv">Download CSV</button>
+</div>
+<div id="table"></div>
+{% endblock body %}
