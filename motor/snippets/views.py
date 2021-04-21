@@ -20,6 +20,10 @@ def home(request):
     return render(request, 'snippets/Home.html')
 
 
+def about(request):
+    return render(request, 'snippets/About.html')
+
+
 @api_view(('GET',))  ### NOT NEEDED
 def registry_list(request):
     if request.method == 'GET':

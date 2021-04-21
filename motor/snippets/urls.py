@@ -4,8 +4,9 @@ from . import views
 urlpatterns = [
     path('registriesAPI/', views.registry_list),
     path('registriesAPI/<int:pk>/', views.registry_detail),
-
+    path('', views.home),
     path('home/', views.home),
+    path('about/', views.about),
     path('table/', views.list_registries),
     path('graph/', views.graph_registries),
 
