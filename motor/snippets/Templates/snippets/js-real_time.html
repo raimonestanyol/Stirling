@@ -31,7 +31,7 @@
     //   $('#real-time-vars').html(content)
     // };
     function printVar(data){
-      var T_POWER = parseInt(( data.COOL_T_OUT - data.COOL_T_IN ) * data.COOL_FLOW * 4184 / 60)
+      var T_POWER = Math.max(parseInt(( data.COOL_T_OUT - data.COOL_T_IN ) * data.COOL_FLOW * 4184 / 60), 0)
       var date = new Date(data.DATETIME)
       hours = date.getHours()
       minutes = date.getMinutes()
